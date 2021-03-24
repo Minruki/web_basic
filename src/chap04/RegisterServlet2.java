@@ -1,7 +1,13 @@
-package web_basic;
+package chap04;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +46,6 @@ public class RegisterServlet2 extends HttpServlet {
 		String subject = request.getParameter("subject");
 		String[] mailing = request.getParameterValues("mailing");
 				
-		System.out.println(satis);
 		PrintWriter out = response.getWriter();
 		out.printf("<html>가입정보<br>");
 		out.printf("id %s<br>password %s<br>", id, (pwd1.equals(pwd2)?"일치":"불일치"));
@@ -78,7 +83,54 @@ public class RegisterServlet2 extends HttpServlet {
 				}
 			}
 		}
+		
+		String start = request.getParameter("start-date");
+		String end = request.getParameter("end-date");
+		System.out.println(start + " : " + end);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		try {
+			Date startDate = sdf.parse(start);
+			Date endDate = sdf.parse(end);
+			
+			out.printf("start %tF<br>", startDate);
+			out.printf("end %tF<br>", endDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		
+		SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
+		
+		String startTime1 = request.getParameter("start-time1");
+		String endTime1 = request.getParameter("end-time1");
+		
+		try {
+			Date sTime1 = sdf2.parse(startTime1);
+			Date eTime1 = sdf2.parse(endTime1);
+			
+			out.printf("start Time : %tT<br>", sTime1);
+			out.printf("end Time : %tT<br>", eTime1);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		String startTime2 = request.getParameter("start-time2"); 
+		String endTime2 = request.getParameter("end-time2");
+		System.out.printf("%s - %s%n", startTime2, endTime2);
+		
+		LocalDateTime startDate = LocalDateTime.parse(startTime2, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+		LocalDateTime endDate = LocalDateTime.parse(endTime2, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		out.printf("start Date-Time : %s<br>", startDate.format(formatter));
+		out.printf("end Date-Time : %s<br>", endDate.format(formatter));
 		out.printf("</html>");
-
+		
+		//localDateTime -> Date변환
+		Date sd = Date.from(startDate.atZone(ZoneId.systemDefault()).toInstant());
+		Date ed = Date.from(endDate.atZone(ZoneId.systemDefault()).toInstant());
+		System.out.printf("%1$tF %1$tT - %2$tF %2$tT%n", sd, ed);
 	}
 }
