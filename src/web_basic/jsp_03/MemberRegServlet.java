@@ -52,9 +52,9 @@ public class MemberRegServlet extends HttpServlet {
 			String hobby = request.getParameter("hobby");
 			
 			out.println("이름  = "+name + "<br>");
-			out.println("이름  = "+addr + "<br>");
-			out.println("이름  = "+tel + "<br>");
-			out.println("이름  = "+hobby + "<br>");
+			out.println("주소  = "+addr + "<br>");
+			out.println("연락처  = "+tel + "<br>");
+			out.println("취미 = "+hobby + "<br>");
 		}
 	}
 
